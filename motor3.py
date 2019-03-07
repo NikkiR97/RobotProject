@@ -1,5 +1,5 @@
 import RPi.GPIO as GPIO
-from time import sleep
+import time
 
 # Pins for Motor Driver Inputs 
 Motor1A = 24
@@ -16,6 +16,9 @@ Motor4A = 26
 Motor4B = 16
 
 sensor = 17
+
+TRIG = 18
+ECHO = 12
 
  
 def init():
@@ -62,7 +65,7 @@ def reverse(tf):
     GPIO.output(Motor4A, False)
     GPIO.output(Motor4B, True)
     
-    sleep(tf)
+    time.sleep(tf)
     GPIO.cleanup()
 
 def turn_left(tf):
@@ -77,7 +80,7 @@ def turn_left(tf):
     GPIO.output(Motor4A, True)
     GPIO.output(Motor4B, False)
     
-    sleep(tf)
+    time.sleep(tf)
     GPIO.cleanup()
 
 
@@ -93,7 +96,7 @@ def turn_right(tf):
     GPIO.output(Motor4A, False)
     GPIO.output(Motor4B, False)
     
-    sleep(tf)
+    time.sleep(tf)
     GPIO.cleanup()
 
 def pivot_left(tf):
@@ -108,7 +111,7 @@ def pivot_left(tf):
     GPIO.output(Motor4A, True)
     GPIO.output(Motor4B, False)
 
-    sleep(tf)
+    time.sleep(tf)
     GPIO.cleanup()
 
 def pivot_right(tf):
@@ -123,7 +126,7 @@ def pivot_right(tf):
     GPIO.output(Motor4A, True)
     GPIO.output(Motor4B, False)
     
-    sleep(tf)
+    time.sleep(tf)
     GPIO.cleanup()
 
 
@@ -138,23 +141,44 @@ def stop():
     GPIO.output(Motor4B,GPIO.LOW)
     GPIO.cleanup()
  
+def sensor_distance():
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(TRIG, GPIO.OUT)
+    GPIO.output(TRIG, 0)
+    GPIO.setup(ECHO, GPIO.IN)
+    time.sleep(0.1)
+    print ("Starting Measurement...")
+    GPIO.output(TRIG, 1)
+    time.sleep(1)
+    GPIO.output(TRIG, 0)
+    while GPIO.input(ECHO) == 0:
+        pass
+    start = time.time()
+    while GPIO.input(ECHO) == 1:
+        pass
+    stop = time.time()
+    print ((stop - start) * 17000)
+    GPIO.cleanup()
+ 
 
 #main
-setup()
+init()
 try:
     while 1:
-        print ("forward!")
-        forward(5)
-        print ("turn right!")
-        turn_right(5)
-        print ("pivot right!")
-        pivot_right(5)
-        print ("turn left!")
-        turn_left(5)
-        print ("pivot left!")
-        pivot_left(5)
-        print ("Reverse!")
-        reverse(5)
+        sensor_distance()
+    #while 1:
+      #  print ("forward!")
+      #  forward(5)
+      #  print ("turn right!")
+      #  turn_right(5)
+      #  print ("pivot right!")
+      #  pivot_right(5)
+      #  print ("turn left!")
+      #  turn_left(5)
+      #  print ("pivot left!")
+      #  pivot_left(5)
+      #  print ("Reverse!")
+      #  reverse(5)
         #destroy()
 except KeyboardInterrupt:
     stop()
