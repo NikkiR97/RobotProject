@@ -157,15 +157,18 @@ def sensor_distance():
     while GPIO.input(ECHO) == 1:
         pass
     stop = time.time()
-    print ((stop - start) * 17000)
+    distance = ((stop - start) * 17000)
     GPIO.cleanup()
+    return distance
  
 
 #main
 init()
 try:
     while 1:
-        forward(4)
+        forward(2)
+        while sensor_distance() < 25:
+            pivot_right(2)
         #sensor_distance()
     #while 1:
         #print ("forward!")
