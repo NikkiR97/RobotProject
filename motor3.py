@@ -1,5 +1,5 @@
 import RPi.GPIO as GPIO
-import time
+from time import sleep
 
 # Pins for Motor Driver Inputs 
 Motor1A = 24
@@ -17,8 +17,8 @@ Motor4B = 16
 
 sensor = 17
 
-TRIG = 18
-ECHO = 12
+#TRIG = 18
+#ECHO = 12
 
  
 def init():
@@ -165,12 +165,13 @@ def sensor_distance():
 init()
 try:
     while 1:
-        sensor_distance()
+        forward(4)
+        #sensor_distance()
     #while 1:
-      #  print ("forward!")
-      #  forward(5)
-      #  print ("turn right!")
-      #  turn_right(5)
+        #print ("forward!")
+        #forward(1)
+       #print ("turn right!")
+        #turn_right(1)
       #  print ("pivot right!")
       #  pivot_right(5)
       #  print ("turn left!")
