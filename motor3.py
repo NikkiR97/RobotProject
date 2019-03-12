@@ -165,7 +165,13 @@ def sensor_distance():
 init()
 try:
     while 1:
-        forward(4)
+        #forward(4)
+        GPIO.output(Motor1A, True)
+        GPIO.output(Motor1B, False)
+        GPIO.output(Motor2A, True)
+        GPIO.output(Motor2B, False)
+        sleep(1)
+        
         #sensor_distance()
     #while 1:
         #print ("forward!")
@@ -184,3 +190,4 @@ try:
 except KeyboardInterrupt:
     stop()
     pass
+
