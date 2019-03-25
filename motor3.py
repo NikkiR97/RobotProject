@@ -1,5 +1,6 @@
 import RPi.GPIO as GPIO
-from time import sleep
+#from time import sleep
+import time
 
 # Pins for Motor Driver Inputs 
 Motor1A = 24
@@ -50,7 +51,7 @@ def forward(tf) :
     GPIO.output(Motor4A, True)
     GPIO.output(Motor4B, False)
     
-    sleep(tf)
+    time.sleep(tf)
     GPIO.cleanup()
 
 def reverse(tf):
@@ -165,12 +166,8 @@ def sensor_distance():
 init()
 try:
     while 1:
-        #forward(4)
-        GPIO.output(Motor1A, True)
-        GPIO.output(Motor1B, False)
-        GPIO.output(Motor2A, True)
-        GPIO.output(Motor2B, False)
-        sleep(1)
+        forward(1)
+        reverse(1)
         
         #sensor_distance()
     #while 1:
