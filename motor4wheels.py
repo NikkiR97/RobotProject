@@ -46,7 +46,7 @@ def reverse(tf):
     time.sleep(tf)
     #gpio.cleanup()
 
-def turn_right(tf):
+def turn_left(tf):
     init()
     motor1PWM.start(100)
     motor2PWM.start(100)
@@ -57,7 +57,7 @@ def turn_right(tf):
     time.sleep(tf)
     #gpio.cleanup()
 
-def turn_left(tf):
+def turn_right(tf):
     init()
     motor1PWM.start(100)
     motor2PWM.start(100)
