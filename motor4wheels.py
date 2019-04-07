@@ -14,6 +14,7 @@ def init() :
     gpio.setup(13, gpio.OUT)
     gpio.setup(15, gpio.OUT)
     gpio.setup(18, gpio.IN)
+    gpio.setup(16, gpio.IN)
     #sensor = gpio.setup(18, gpio.IN) #ir
     #gpio.setup(12, gpio.OUT) #enA
     #gpio.setup(32, gpio.OUT) #enB
@@ -101,8 +102,10 @@ def stop():
 
 def ultrasonic_distance():
     gpio.setmode(gpio.BOARD)
-    TRIG = 16
-    ECHO = 18
+    TRIG = 29
+    ECHO = 31
+    start = 0
+    stop = 1
     gpio.setup(TRIG, gpio.OUT)
     gpio.output(TRIG, 0)
     gpio.setup(ECHO, gpio.IN)
@@ -111,14 +114,37 @@ def ultrasonic_distance():
     gpio.output(TRIG, 1)
     time.sleep(0.00001)
     gpio.output(TRIG, 0)
-    while gpio.input(ECHO) == 0:
+    while (gpio.input(ECHO) == 0):
         pass
     start = time.time()
-    while gpio.input(ECHO) == 1:
+    while (gpio.input(ECHO) == 1):
         pass
     stop = time.time()
-    return (stop - start) * 17000
+    #gpio.cleanup()
+    return ((stop - start) * 17000 )
+   
+def ultrasonic2():
+    gpio.setmode(gpio.BOARD)
+    gpio.setup(29, gpio.OUT)
+    gpio.setup(31, gpio.IN)
+    
+    nosig = 0
+    sig = 0
+    
+    gpio.output(29, False)
+    while gpio.input(31) == 0:
+        nosig = time.time()
+    
+    while gpio.input(31) ==1:
+        sig = time.time()
+        
+    tl = sig - nosig
+    
+    distance = tl/0.000058 #in cm
+    
     gpio.cleanup()
+    return distance
+    
 
 def ir_sensor_init():
     init()
@@ -140,42 +166,83 @@ def ir_sensor():
         reverse(2)
 
 def test():
-    forward(2)
-    reverse(2)
-    turn_left(2)
-    turn_right(2)
+    #forward(0.5225)
+    #reverse(0.5225)
+    #turn_left(2)
+    #turn_right(0.5225)
+    #pivot_right(0.48)
+    pivot_left(0.455)
     stop()
+    
+def autonomous():
+    init() 
+    try:
+        while 1:  
+            sensor1 = gpio.input(18)
+            sensor2 = gpio.input(16)
+            if not sensor1 or not sensor2:
+                print('OBSTACLE!')
+                stop()
+                reverse(1)
+                time.sleep(0.5)
+                pivot_right(1)
+                stop()
+                time.sleep(0.5)
+            forward(0.5)
+    except KeyboardInterrupt:
+        stop()
+        gpio.cleanup()
+        pass
 
+    
+def autonomous_ultrasonic():
+    init() 
+    try:
+        while 1:  
+            distance = ultrasonic_distance()
+            print(distance)
+            init()
+            if distance < 50.01:
+                print('OBSTACLE!')
+                stop()
+                reverse(1)
+                time.sleep(0.5)
+                pivot_right(1)
+                stop()
+                time.sleep(0.5)
+            forward(0.5)
+    except KeyboardInterrupt:
+        stop()
+        gpio.cleanup()
+        pass
+
+#test()
+#autonomous()
 #init()
 #ir_sensor_init()
 #while 1:
 #sensor = gpio.setup(18, gpio.IN) #ir
 #
 
-try:
-    while 1:
-        init()
-        #gpio.setmode(gpio.BOARD)
-        sensor = gpio.input(18)
+#try:
+#    while 1:
+#        init()
+#        sensor1 = gpio.input(18)
+#        sensor2 = gpio.input(16)
+#        if not sensor1 and not sensor2:
+#            print('OBSTACLE!')
+#            stop()
+#            reverse(0.5)
+#            time.sleep(0.5)
+#            turn_right(1)
+#            stop()
+#            time.sleep(0.5)
+#        forward(1)
         
-        #forward(1)
-        
-        
-        if not sensor:
-            print('OBSTACLE!')
-            stop()
-            time.sleep(0.5)
-            reverse(0.5)
-            time.sleep(0.5)
-            turn_right(1)
-            stop()
-
-        forward(1)
-        
-except KeyboardInterrupt:
-    stop()
-    gpio.cleanup()
-    pass
+#except KeyboardInterrupt:
+#    stop()
+#    gpio.cleanup()
+#    pass
 
 #i=0;
 #sensor = gpio.input(18)
