@@ -1,5 +1,14 @@
 import RPi.GPIO as gpio
 import time
+from Map import Map
+positionX = 0
+positionY = 0
+
+front_o = 1
+right_o = 2
+back_o = 3
+left_o = 4
+orientation = front_o
 
 gpio.setmode(gpio.BOARD)
 gpio.setup(12, gpio.OUT) #enA
@@ -15,6 +24,9 @@ def init() :
     gpio.setup(15, gpio.OUT)
     gpio.setup(18, gpio.IN)
     gpio.setup(16, gpio.IN)
+    
+    motor1PWM.start(60)
+    motor2PWM.start(60)
     #sensor = gpio.setup(18, gpio.IN) #ir
     #gpio.setup(12, gpio.OUT) #enA
     #gpio.setup(32, gpio.OUT) #enB
@@ -24,6 +36,18 @@ def init() :
     #gpio.output(12, True)
     #gpio.output(32, True)
     
+def ultrasonic_init() :
+    gpio.setmode(gpio.BOARD)
+    
+    TRIG = 29 #trig is the same for all ultrasonic sensors
+    gpio.setup(TRIG, gpio.OUT)
+    gpio.output(TRIG, 0)
+    
+   # ECHO values: front=31, left=22, right=36, back=37
+    gpio.setup(31, gpio.IN)
+    gpio.setup(22, gpio.IN)
+    gpio.setup(36, gpio.IN)
+    gpio.setup(37, gpio.IN)
 
 def forward(tf) :
     init()
@@ -49,8 +73,8 @@ def reverse(tf):
 
 def turn_left(tf):
     init()
-    motor1PWM.start(100)
-    motor2PWM.start(100)
+    motor1PWM.ChangeDutyCycle(100)
+    motor2PWM.ChangeDutyCycle(100)
     gpio.output(7,  True)
     gpio.output(11, True)
     gpio.output(13, True )
@@ -60,8 +84,8 @@ def turn_left(tf):
 
 def turn_right(tf):
     init()
-    motor1PWM.start(100)
-    motor2PWM.start(100)
+    motor1PWM.ChangeDutyCycle(100)
+    motor2PWM.ChangeDutyCycle(100)
     gpio.output(7,  False)
     gpio.output(11, True)
     gpio.output(13, False )
@@ -100,29 +124,100 @@ def stop():
 
     #gpio.cleanup()
 
-def ultrasonic_distance():
-    gpio.setmode(gpio.BOARD)
+def F_ultrasonic_distance(): #front ultrasonic
+    ultrasonic_init()
+    time.sleep(0.1)
+    
+    """ gpio.setmode(gpio.BOARD)
     TRIG = 29
     ECHO = 31
     start = 0
     stop = 1
     gpio.setup(TRIG, gpio.OUT)
     gpio.output(TRIG, 0)
-    gpio.setup(ECHO, gpio.IN)
-    time.sleep(0.1)
-    print ("Starting Measurement...")
-    gpio.output(TRIG, 1)
+    gpio.setup(ECHO, gpio.IN) """
+    
+    start = 0
+    stop = 1
+    
+    print ("Starting Measurement from FRONT ultrasonic...")
+    gpio.output(29, 1) #enable trigger
     time.sleep(0.00001)
-    gpio.output(TRIG, 0)
-    while (gpio.input(ECHO) == 0):
+    gpio.output(29, 0) #disable trigger
+    
+    while (gpio.input(31) == 0):
         pass
     start = time.time()
-    while (gpio.input(ECHO) == 1):
+    while (gpio.input(31) == 1):
         pass
     stop = time.time()
     #gpio.cleanup()
     return ((stop - start) * 17000 )
-   
+
+def L_ultrasonic_distance(): #left ultrasonic
+    ultrasonic_init()
+    time.sleep(0.1)
+    
+    start = 0
+    stop = 1
+
+    print ("Starting Measurement from LEFT ultrasonic...")
+    gpio.output(29, 1)
+    time.sleep(0.00001)
+    gpio.output(29, 0)
+    
+    while (gpio.input(22) == 0):
+        pass
+    start = time.time()
+    while (gpio.input(22) == 1):
+        pass
+    stop = time.time()
+    #gpio.cleanup()
+    return ((stop - start) * 17000 )
+
+def R_ultrasonic_distance(): #right ultrasonic
+    ultrasonic_init()
+    time.sleep(0.1)
+    
+    start = 0
+    stop = 1
+    
+    print ("Starting Measurement from RIGHT ultrasonic...")
+    gpio.output(29, 1)
+    time.sleep(0.00001)
+    gpio.output(29, 0)
+    
+    while (gpio.input(36) == 0):
+        pass
+    start = time.time()
+    while (gpio.input(36) == 1):
+        pass
+    stop = time.time()
+    #gpio.cleanup()
+    return ((stop - start) * 17000 )
+
+def B_ultrasonic_distance(): #back ultrasonic
+    ultrasonic_init()
+    time.sleep(0.1)
+    
+    start = 0
+    stop = 1
+
+    print ("Starting Measurement from BACK ultrasonic...")
+    gpio.output(29, 1)
+    time.sleep(0.00001)
+    gpio.output(29, 0)
+    
+    while (gpio.input(37) == 0):
+        pass
+    start = time.time()
+    while (gpio.input(37) == 1):
+        pass
+    stop = time.time()
+    #gpio.cleanup()
+    return ((stop - start) * 17000 )
+
+"""   
 def ultrasonic2():
     gpio.setmode(gpio.BOARD)
     gpio.setup(29, gpio.OUT)
@@ -144,7 +239,7 @@ def ultrasonic2():
     
     gpio.cleanup()
     return distance
-    
+"""
 
 def ir_sensor_init():
     init()
@@ -166,12 +261,12 @@ def ir_sensor():
         reverse(2)
 
 def test():
-    #forward(0.5225)
-    #reverse(0.5225)
+    #forward(0.75)
+    reverse(0.75)
     #turn_left(2)
     #turn_right(0.5225)
-    #pivot_right(0.48)
-    pivot_left(0.455)
+    #pivot_right(1.044)
+    #pivot_left(0.455)
     stop()
     
 def autonomous():
@@ -199,24 +294,85 @@ def autonomous_ultrasonic():
     init() 
     try:
         while 1:  
-            distance = ultrasonic_distance()
+            distance = F_ultrasonic_distance()
             print(distance)
             init()
             if distance < 50.01:
                 print('OBSTACLE!')
                 stop()
-                reverse(1)
-                time.sleep(0.5)
-                pivot_right(1)
+                reverse(0.5225)
                 stop()
                 time.sleep(0.5)
-            forward(0.5)
+                pivot_right(0.48)
+                stop()
+                time.sleep(0.5)
+            forward(0.5225)
     except KeyboardInterrupt:
         stop()
         gpio.cleanup()
         pass
+    
+def shiftOrientation(newShift):
+    global orientation
+    if newShift == "left":
+        orientation = orientation - 1
+        if orientation < 1:
+            orientation = 4
+    elif newShift == "right":
+        orientation = orientation + 1
+        if orientation > 4:
+            orientation = 1
+            
+            
 
-#test()
+def spontaneousAutonomous1Ultrasonic(ultrasonic_distance, sensor1, sensor2, orientation):
+    if ultrasonic_distance < 50 or not sensor1 or not sensor2:
+        pivot_right(0.875)
+        shiftOrientation("right")
+    else:
+        forward(0.5225)
+        fxy = forwardByOrientation(orientation)
+        global positionX
+        global positionY
+        positionX = positionX + fxy[0]
+        positionY = positionY + fxy[1]
+        
+def forwardByOrientation(orientation):
+    f = (0, 1) #(x, y)
+    if orientation == 1:
+        f = (0, 1)
+    elif orientation == 2:
+        f = (1, 0)
+    elif orientation == 3:
+        f = (0, -1)
+    elif orientation == 4:
+        f = (-1, 0)
+    return f
+        
+
+init() 
+try:
+    m = Map()
+    while 1:
+        distanceF = F_ultrasonic_distance()
+        distanceR = R_ultrasonic_distance()
+        distanceB = B_ultrasonic_distance()
+        distanceL = L_ultrasonic_distance()
+        sensor1 = gpio.input(18)
+        sensor2 = gpio.input(16)
+        print(distanceF)
+        init()
+        m.generateMapFrom1Point4Block(positionX, positionY, distanceF, distanceR,
+                                      distanceB, distanceL, orientation)
+        spontaneousAutonomous1Ultrasonic(distanceF, False, False, orientation)
+        stop()
+        time.sleep(0.5)
+except KeyboardInterrupt:
+    stop()
+    m.printMap()
+    #gpio.cleanup()
+
+
 #autonomous()
 #init()
 #ir_sensor_init()
