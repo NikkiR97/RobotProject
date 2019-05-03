@@ -75,30 +75,110 @@ class Map:
             l = (0, -1)
             f = (-1, 0)
 
-        if mapList[positionX + f[0]][positionY + f[1]].getDetected() is False:
-            mapList[positionX + f[0]][positionY + f[1]].setDetected(true)  # front
+        if self.mapList[positionX + f[0]][positionY + f[1]].getDetected() is False:
+            self.mapList[positionX + f[0]][positionY + f[1]].setDetected(True)  # front
             if(ultrasonicFD >=30):
-                mapList[positionX+ f[0]][positionY + f[1]].setObstacle(False)
+                self.mapList[positionX+ f[0]][positionY + f[1]].setObstacle(False)
             else:
-                mapList[positionX + f[0]][positionY + + f[1]].setObstacle(True)
+                self.mapList[positionX + f[0]][positionY + + f[1]].setObstacle(True)
 
-        if mapList[positionX + r[0]][positionY + r[1]].getDetected() is False:
-            mapList[positionX + r[0]][positionY + r[1]].setDetected(True)  # right
+        if self.mapList[positionX + r[0]][positionY + r[1]].getDetected() is False:
+            self.mapList[positionX + r[0]][positionY + r[1]].setDetected(True)  # right
             if (ultrasonicRD >= 30):
-                mapList[positionX + r[0]][positionY + r[1]].setObstacle(False)
+                self.mapList[positionX + r[0]][positionY + r[1]].setObstacle(False)
             else:
-                mapList[positionX + r[0]][positionY + r[1]].setObstacle(True)
+                self.mapList[positionX + r[0]][positionY + r[1]].setObstacle(True)
 
-        if mapList[positionX + b[0]][positionY  + b[1]].getDetected() is False:
-            mapList[positionX  + b[0]][positionY  + b[1]].setDetected(True)  # back
+        if self.mapList[positionX + b[0]][positionY  + b[1]].getDetected() is False:
+            self.mapList[positionX  + b[0]][positionY  + b[1]].setDetected(True)  # back
             if (ultrasonicBD >= 30):
-                mapList[positionX + b[0]][positionY + b[1]].setObstacle(False)
+                self.mapList[positionX + b[0]][positionY + b[1]].setObstacle(False)
             else:
-                mapList[positionX + b[0]][positionY + b[1]].setObstacle(True)
+                self.mapList[positionX + b[0]][positionY + b[1]].setObstacle(True)
 
-        if mapList[positionX + l[0]][positionY + l[1]].getDetected() is False:
-            mapList[positionX + l[0]][positionY + l[1]].setDetected(True)  # left
+        if self.mapList[positionX + l[0]][positionY + l[1]].getDetected() is False:
+            self.mapList[positionX + l[0]][positionY + l[1]].setDetected(True)  # left
             if (ultrasonicLD >= 30):
-                mapList[positionX + l[0]][positionY + l[1]].setObstacle(False)
+                self.mapList[positionX + l[0]][positionY + l[1]].setObstacle(False)
             else:
-                mapList[positionX + l[0]][positionY + l[1]].setObstacle(True)
+                self.mapList[positionX + l[0]][positionY + l[1]].setObstacle(True)
+                
+
+    def generateMapFrom1Point4BlockX(self, positionX, positionY, ultrasonicFD,
+                              ir_sensor1, ir_sensor2, orientation):
+        f = (0, 1) #(x, y)
+        if orientation == 1:
+            f = (0, 1)
+        elif orientation == 2:
+            f = (1, 0)
+        elif orientation == 3:
+            f = (0, -1)
+        elif orientation == 4:
+            f = (-1, 0)
+
+        if self.mapList[positionX + f[0]][positionY + f[1]].getDetected() is False:
+            self.mapList[positionX + f[0]][positionY + f[1]].setDetected(True)  # front
+            if ultrasonicFD < 30 or not ir_sensor1 or not ir_sensor2:
+                self.mapList[positionX + f[0]][positionY + f[1]].setObstacle(True)
+                
+                
+    def manhattanDistance(self, currentX, currentY, destX, destY):
+        manhattan_distance = abs(currentX -destX) + abs(currentY-destY)
+        return manhattan_distance
+
+    def getNextLoc(self, currentX, currentY):
+        current_distance = 1000
+        destination_x = currentX
+        destination_y = currentY
+        for i in range(100):
+            for j in range(100):
+                new_distance = self.manhattanDistance(currentX, currentY, i, j)
+                if self.mapList[i][j].getDetected() and not self.mapList[i][j].getTraveled() and \
+                        not self.mapList[i][j].getObstacle() and new_distance < current_distance:
+                    current_distance = new_distance
+                    destination_x = i
+                    destination_y = j
+        return (destination_x, destination_y)
+
+    def nextStep(self, currentLoc, destination, orientation):
+        man_dis_to_des = 1000
+        direction = 1
+        #front
+        if self.mapList[currentLoc[0]][currentLoc[1]+1].getDetected() and \
+                not self.mapList[currentLoc[0]][currentLoc[1]+1].getObstacle():
+            temp_distance = self.manhattanDistance(currentLoc[0], currentLoc[1]+1, destination[0], destination[1])
+            if temp_distance < man_dis_to_des:
+                man_dis_to_des = temp_distance
+                direction = 1
+        #right
+        if self.mapList[currentLoc[0]+1][currentLoc[1]].getDetected() and \
+                not self.mapList[currentLoc[0]+1][currentLoc[1]].getObstacle():
+            temp_distance = self.manhattanDistance(currentLoc[0]+1, currentLoc[1], destination[0], destination[1])
+            if temp_distance < man_dis_to_des:
+                man_dis_to_des = temp_distance
+                direction = 2
+        #back
+        if self.mapList[currentLoc[0]][currentLoc[1]-1].getDetected() and \
+                not self.mapList[currentLoc[0]][currentLoc[1]-1].getObstacle():
+            temp_distance = self.manhattanDistance(currentLoc[0], currentLoc[1]-1, destination[0], destination[1])
+            if temp_distance < man_dis_to_des:
+                man_dis_to_des = temp_distance
+                direction = 3
+        #left
+        if self.mapList[currentLoc[0]-1][currentLoc[1]].getDetected() and \
+                not self.mapList[currentLoc[0]-1][currentLoc[1]].getObstacle():
+            temp_distance = self.manhattanDistance(currentLoc[0]-1, currentLoc[1], destination[0], destination[1])
+            if temp_distance < man_dis_to_des:
+                man_dis_to_des = temp_distance
+                direction = 4
+
+        direction = (direction + orientation - 1) % 4
+        if direction <= 5:
+            direction = direction - 1
+        else:
+            direction = (direction - 1) % 4
+        return direction
+                
+                
+        
+

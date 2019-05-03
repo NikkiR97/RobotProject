@@ -60,13 +60,13 @@ def shiftOrientation(newShift):
 
 def spontaneousAutonomous4ultrasonic(ultrasonicFD, ultrasonicRD, ultrasonicLD, ultrasonicBD):
     if ultrasonicFD > 30:
-        forward()
+        forward(0.5225)
     elif ultrasonicRD > 30:
-        right()
+        right(0.48)
     elif ultrasonicBD > 30:
-        back()
+        back(0.5225)
     elif ultrasonicLD > 30:
-        left()
+        left(0.)
     else:
         stop()
 

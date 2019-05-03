@@ -5,20 +5,20 @@ class MapSpot:
         self.traveled = False
         self.obstacle = False
 
-    def setDetected(detected):
+    def setDetected(self, detected):
         self.detected = detected
 
-    def getDetected():
+    def getDetected(self):
         return self.detected
 
-    def setTraveled(traveled):
+    def setTraveled(self, traveled):
         self.traveled = traveled
 
-    def getTraveled():
+    def getTraveled(self):
         return self.traveled
 
-    def setObstacle(obstacle):
+    def setObstacle(self, obstacle):
         self.obstacle = obstacle
 
-    def getObstacle():
+    def getObstacle(self):
         return self.obstacle

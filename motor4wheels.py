@@ -18,10 +18,10 @@ motor2PWM = gpio.PWM(32, 100)
 
 def init() :
     gpio.setmode(gpio.BOARD)
-    gpio.setup(7, gpio.OUT)
-    gpio.setup(11, gpio.OUT)
-    gpio.setup(13, gpio.OUT)
-    gpio.setup(15, gpio.OUT)
+    gpio.setup(7, gpio.OUT) #in1
+    gpio.setup(11, gpio.OUT) #in2
+    gpio.setup(13, gpio.OUT) #in3
+    gpio.setup(15, gpio.OUT) #in4
     gpio.setup(18, gpio.IN)
     gpio.setup(16, gpio.IN)
     
@@ -123,6 +123,14 @@ def stop():
     gpio.output(15,False)
 
     #gpio.cleanup()
+    
+def Stop(tf):
+    init()
+    gpio.output(7,False)
+    gpio.output(11,False)
+    gpio.output(13,False)
+    gpio.output(15,False)
+    time.sleep(tf)
 
 def F_ultrasonic_distance(): #front ultrasonic
     ultrasonic_init()
@@ -326,7 +334,7 @@ def shiftOrientation(newShift):
             
 
 def spontaneousAutonomous1Ultrasonic(ultrasonic_distance, sensor1, sensor2, orientation):
-    if ultrasonic_distance < 50 or not sensor1 or not sensor2:
+    if ultrasonic_distance < 50: #or not sensor1 or not sensor2:
         pivot_right(0.875)
         shiftOrientation("right")
     else:
@@ -348,28 +356,94 @@ def forwardByOrientation(orientation):
     elif orientation == 4:
         f = (-1, 0)
     return f
-        
 
-init() 
+def recordMovement():
+    position = (positionX, positionY)
+    record_movement.append(position)
+
+def autonomousPath(map, ultrasonicFD, ultrasonicRD, ultrasonicLD,
+                          ultrasonicBD, orientation):
+    #generateMapFrom1Point4Block(positionX, positionY, ultrasonicFD,
+    #                            ultrasonicRD, ultrasonicLD, ultrasonicBD,
+    #                            orientation)
+    nextLoc = map.getNextLoc(positionX, positionY)
+    nextStep = map.nextStep((positionX, positionY), nextLoc, orientation)
+    if nextStep == 1:
+        if ultrasonicFD > 50:
+            forward(0.5225)
+            fxy = forwardByOrientation(orientation)
+            global positionX
+            global positionY
+            positionX = positionX + fxy[0]
+            positionY = positionY + fxy[1]
+        else:
+            spontaneousAutonomous1Ultrasonic(ultrasonicFD, False, False, orientation)
+    elif nextStep == 2:
+        pivot_right(0.875)
+        shiftOrientation("right")
+        if ultrasonicFD > 50:
+            forward(0.5225)
+            fxy = forwardByOrientation(orientation)
+            global positionX
+            global positionY
+            positionX = positionX + fxy[0]
+            positionY = positionY + fxy[1]
+        else:
+            spontaneousAutonomous1Ultrasonic(ultrasonicFD, False, False, orientation)
+    elif nextStep == 3:
+        pivot_right(0.875)
+        shiftOrientation("right")
+        pivot_right(0.875)
+        shiftOrientation("right")
+        if ultrasonicFD > 50:
+            forward(0.5225)
+            fxy = forwardByOrientation(orientation)
+            global positionX
+            global positionY
+            positionX = positionX + fxy[0]
+            positionY = positionY + fxy[1]
+        else:
+            spontaneousAutonomous1Ultrasonic(ultrasonicFD, False, False, orientation)
+    elif nextStep == 4:
+        pivot_left(0.875)
+        shiftOrientation("left")
+        if ultrasonicFD > 50:
+            forward()
+            forward(0.5225)
+            fxy = forwardByOrientation(orientation)
+            global positionX
+            global positionY
+            positionX = positionX + fxy[0]
+            positionY = positionY + fxy[1]
+        else:
+            spontaneousAutonomous1Ultrasonic(ultrasonicFD, False, False, orientation)
+    else:
+        spontaneousAutonomous1Ultrasonic(ultrasonicFD, False, False, orientation)
+
+init()
+#ultrasonic_init()
 try:
-    m = Map()
+    #m = Map()
     while 1:
-        distanceF = F_ultrasonic_distance()
-        distanceR = R_ultrasonic_distance()
-        distanceB = B_ultrasonic_distance()
+        #distanceF= F_ultrasonic_distance()
+        #distanceR = R_ultrasonic_distance()
+        #distanceB = B_ultrasonic_distance()
         distanceL = L_ultrasonic_distance()
-        sensor1 = gpio.input(18)
-        sensor2 = gpio.input(16)
-        print(distanceF)
+        #sensor1 = gpio.input(18)
+        #sensor2 = gpio.input(16)
+        print(distanceL)
         init()
-        m.generateMapFrom1Point4Block(positionX, positionY, distanceF, distanceR,
-                                      distanceB, distanceL, orientation)
-        spontaneousAutonomous1Ultrasonic(distanceF, False, False, orientation)
-        stop()
+        #m.generateMapFrom1Point4Block(positionX, positionY, distanceF, distanceR,
+         #                             distanceB, distanceL, orientation)
+        #autonomous_ultrasonic()
+        spontaneousAutonomous1Ultrasonic(distanceL, False, False, orientation)
+        #autonomousPath(m, distanceF, distanceR, distanceL, distanceB, orientation)
+        #gpio.cleanup()
+        Stop(0.5)
         time.sleep(0.5)
 except KeyboardInterrupt:
     stop()
-    m.printMap()
+    #m.printMap()
     #gpio.cleanup()
 
 
