@@ -8,16 +8,20 @@ DIV   = 0x19
 CONFIG   = 0x1A
 INT_PIN_CFG = 0x37
 GYRO_CONFIG  = 0x1B
-MAG_CNTL1 = 0x0A
-INT_EN   = 0x38
+MAG_ID = 0x00 #Device ID
+MAG_INFO = 0x01 #Information
+MAG_CNTL1 = 0x0A #Control 1
+MAG_CNTL2 = 0x0B #Control 2
+MAG_ST1 = 0x02 #Status 1
+MAG_ST2 = 0x09 #Status 2
+MAG_ASTC = 0x0c #Self-test
+INT_EN   = 0x38 #Interrupt Enable
 ACCEL_X = 0x3B
 ACCEL_Y = 0x3D
 ACCEL_Z = 0x3F
 GYRO_X  = 0x43
 GYRO_Y  = 0x45
 GYRO_Z  = 0x47
-MAG_ASTC = 0x0c
-
 
 #compass
 HXL = 0x03
@@ -47,18 +51,19 @@ def InitMPU():
     bus.write_byte_data(Device_Address, CONFIG, 0x00)
     bus.write_byte_data(Device_Address, GYRO_CONFIG, 0x00) #24
     bus.write_byte_data(Device_Address, INT_PIN_CFG, 0x22)
+    #enable other chips to join the I2C network
     bus.write_byte_data(Device_Address, INT_EN, 0x01)
-    
     #set bypass mode for magnetometer
-    #bus.write_byte_data(Device_Address, 0x37, 0x02)
+    bus.write_byte_data(Device_Address, 0x37, 0x02)
     
+    time.sleep(1)
+    
+def initMag():
     #request continuous magnetometer measurements in 16 bits, mode 1
     bus.write_byte_data(Magnetometer_Address, MAG_CNTL1, 0x12)
     #make sure self test is 0
     bus.write_byte_data(Magnetometer_Address, MAG_ASTC, 0)
     
-    time.sleep(1)
- 
 def readMPU(addr):
     high = bus.read_byte_data(Device_Address, addr)
     time.sleep(0.01)
@@ -83,8 +88,8 @@ def readComp(addr):
     time.sleep(0.01)
     high = bus.read_byte_data(Magnetometer_Address, addr+1)
     value = ((high << 8) | low)
-    """if(value > 32768):
-        value = value - 65536"""
+    if(value > 32768):
+        value = value - 65536
     return value
 
 def accel():
@@ -126,21 +131,21 @@ def comp():
   global HzCal
   
   
-  #st1 = bus.read_byte_data(Magnetometer_Address, 0x02)
-  st2 = bus.read_byte_data(Magnetometer_Address, 0x09)
-  """while (not (st1 & 0x01)):
+  st1 = bus.read_byte_data(Magnetometer_Address, 0x02)
+  #st2 = bus.read_byte_data(Magnetometer_Address, 0x09)
+  while (not (st1 & 0x01)):
       st1 = bus.read_byte_data(Magnetometer_Address, 0x02)
-      print("st1:"+str(st1))"""
+      #print("st1:"+str(st1))
   #bus.write_byte_data(Magnetometer_Address, MAG_CNTL1, 0x12)
   
   x = 0
   y = 0
   z = 0
       
-  #for i in range(50):
-  x = readComp(HXL)
-  y = readComp(HYL)
-  z = readComp(HZL)
+  for i in range(100):
+      x = x+readComp(HXL)
+      y = y+readComp(HYL)
+      z = z+readComp(HZL)
   Hx = (x/50) #- HxCal
   Hy = (y/50) #- HyCal
   Hz = (z/50) #- HzCal
@@ -149,10 +154,10 @@ def comp():
   print ("y="+str(Hy))
   print ("z="+str(Hz))
   
-  time.sleep(.01)
+  #time.sleep(.01)
  
 def calibrate():
-  global AxCal
+  """global AxCal
   global AyCal
   global AzCal
   x=0
@@ -193,8 +198,9 @@ def calibrate():
   print (GxCal)
   print (GyCal)
   print (GzCal)
- 
+  """
   #read info register of magnetometer
+  print ("Device ID"+ str(readComp(0x00)) + '\n')
   print ("Info"+ str(readComp(0x01)))
  
   global HxCal
@@ -245,10 +251,17 @@ while 1:
 def test():
     try:
         InitMPU()
+        initMag()
         calibrate()
+        print("\n")
         while 1:
+            initMag()
+            #calibrate()
+            print("data:")
             comp()
-            time.sleep(0.5)
+            time.sleep(0.05)
+            #gpio.cleanup()
+            print("\n")
     except KeyboardInterrupt:
         gpio.cleanup()
             

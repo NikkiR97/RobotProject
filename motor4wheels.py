@@ -1,6 +1,9 @@
 import RPi.GPIO as gpio
 import time
 from Map import Map
+
+global positionX
+global positionY
 positionX = 0
 positionY = 0
 
@@ -25,8 +28,8 @@ def init() :
     gpio.setup(18, gpio.IN)
     gpio.setup(16, gpio.IN)
     
-    motor1PWM.start(60)
-    motor2PWM.start(60)
+    motor1PWM.start(80)
+    motor2PWM.start(80)
     #sensor = gpio.setup(18, gpio.IN) #ir
     #gpio.setup(12, gpio.OUT) #enA
     #gpio.setup(32, gpio.OUT) #enB
@@ -51,8 +54,8 @@ def ultrasonic_init() :
 
 def forward(tf) :
     init()
-    motor1PWM.ChangeDutyCycle(60)
-    motor2PWM.ChangeDutyCycle(60)
+    motor1PWM.ChangeDutyCycle(80)
+    motor2PWM.ChangeDutyCycle(80)
     gpio.output(7, False)
     gpio.output(11, True)
     gpio.output(13, True)
@@ -62,8 +65,8 @@ def forward(tf) :
 
 def reverse(tf):
     init()
-    motor1PWM.ChangeDutyCycle(60)
-    motor2PWM.ChangeDutyCycle(60)
+    motor1PWM.ChangeDutyCycle(80)
+    motor2PWM.ChangeDutyCycle(80)
     gpio.output(7, True)
     gpio.output(11, False)
     gpio.output(13, False)
@@ -95,8 +98,8 @@ def turn_right(tf):
 
 def pivot_left(tf):
     init()
-    motor1PWM.ChangeDutyCycle(60)
-    motor2PWM.ChangeDutyCycle(60)
+    motor1PWM.ChangeDutyCycle(80)
+    motor2PWM.ChangeDutyCycle(80)
     gpio.output(7,  True)
     gpio.output(11, False)
     gpio.output(13, True )
@@ -106,8 +109,8 @@ def pivot_left(tf):
 
 def pivot_right(tf):
     init()
-    motor1PWM.ChangeDutyCycle(60)
-    motor2PWM.ChangeDutyCycle(60)
+    motor1PWM.ChangeDutyCycle(80)
+    motor2PWM.ChangeDutyCycle(80)
     gpio.output(7,  False)
     gpio.output(11, True)
     gpio.output(13, False)
@@ -250,8 +253,11 @@ def ultrasonic2():
 """
 
 def ir_sensor_init():
-    init()
+    #init()
     gpio.setmode(gpio.BOARD)
+    gpio.setup(16, gpio.IN) #left ir
+    gpio.setup(18, gpio.IN) #right ir
+    
     time.sleep(0.1)
     
 def ir_sensor():
@@ -269,12 +275,12 @@ def ir_sensor():
         reverse(2)
 
 def test():
-    #forward(0.75)
+    forward(0.75)
     reverse(0.75)
     #turn_left(2)
     #turn_right(0.5225)
-    #pivot_right(1.044)
-    #pivot_left(0.455)
+    pivot_right(1.044)
+    pivot_left(0.455)
     stop()
     
 def autonomous():
@@ -333,12 +339,16 @@ def shiftOrientation(newShift):
             
             
 
-def spontaneousAutonomous1Ultrasonic(ultrasonic_distance, sensor1, sensor2, orientation):
-    if ultrasonic_distance < 50: #or not sensor1 or not sensor2:
-        pivot_right(0.875)
+def spontaneousAutonomous1Ultrasonic(ultrasonic_distance, irL, irR, orientation):
+    if ultrasonic_distance < 50 or not irL or not irR:
+        #pivot_right(0.875)
+        pivot_right(0.7)
         shiftOrientation("right")
+        #print(sensor1)
+        #print(sensor2)
     else:
-        forward(0.5225)
+        #forward(0.5225)
+        forward(0.55)
         fxy = forwardByOrientation(orientation)
         global positionX
         global positionY
@@ -360,6 +370,47 @@ def forwardByOrientation(orientation):
 def recordMovement():
     position = (positionX, positionY)
     record_movement.append(position)
+    
+def f(n):
+    i = 0
+    while(i<n):
+        forward(0.5225)
+        Stop(0.5)
+        time.sleep(0.5)
+    
+def testrun():
+    f(14)
+    pivot_left(0.875)
+    Stop(0.5)
+    time.sleep(0.5)
+    f(22)
+    pivot_left(0.875)
+    Stop(0.5)
+    time.sleep(0.5)
+    f(22)
+    pivot_left(0.875)
+    Stop(0.5)
+    time.sleep(0.5)
+    f(3)
+    pivot_left(0.875)
+    Stop(0.5)
+    time.sleep(0.5)
+    f(22)
+    pivot_right(0.875)
+    Stop(0.5)
+    time.sleep(0.5)
+    f(1)
+    pivot_right(0.875)
+    Stop(0.5)
+    time.sleep(0.5)
+    f(22)
+    pivot_right(0.875)
+    Stop(0.5)
+    time.sleep(0.5)
+    pivot_right(0.875)
+    Stop(0.5)
+    time.sleep(0.5)
+    f(2)
 
 def autonomousPath(map, ultrasonicFD, ultrasonicRD, ultrasonicLD,
                           ultrasonicBD, orientation):
@@ -398,8 +449,8 @@ def autonomousPath(map, ultrasonicFD, ultrasonicRD, ultrasonicLD,
         if ultrasonicFD > 50:
             forward(0.5225)
             fxy = forwardByOrientation(orientation)
-            global positionX
-            global positionY
+            #global positionX
+            #global positionY
             positionX = positionX + fxy[0]
             positionY = positionY + fxy[1]
         else:
@@ -420,23 +471,26 @@ def autonomousPath(map, ultrasonicFD, ultrasonicRD, ultrasonicLD,
     else:
         spontaneousAutonomous1Ultrasonic(ultrasonicFD, False, False, orientation)
 
-init()
+#init()
 #ultrasonic_init()
+#gpio.cleanup()
+ir_sensor_init()    
 try:
     #m = Map()
     while 1:
-        #distanceF= F_ultrasonic_distance()
+        distanceF= F_ultrasonic_distance()
         #distanceR = R_ultrasonic_distance()
         #distanceB = B_ultrasonic_distance()
-        distanceL = L_ultrasonic_distance()
-        #sensor1 = gpio.input(18)
-        #sensor2 = gpio.input(16)
-        print(distanceL)
-        init()
+        #distanceL = L_ultrasonic_distance()
+        gpio.setmode(gpio.BOARD)
+        irL = gpio.input(16)
+        irR = gpio.input(18)
+        print(distanceF)
+        #init()
         #m.generateMapFrom1Point4Block(positionX, positionY, distanceF, distanceR,
          #                             distanceB, distanceL, orientation)
         #autonomous_ultrasonic()
-        spontaneousAutonomous1Ultrasonic(distanceL, False, False, orientation)
+        spontaneousAutonomous1Ultrasonic(distanceF, irL, irR, orientation)
         #autonomousPath(m, distanceF, distanceR, distanceL, distanceB, orientation)
         #gpio.cleanup()
         Stop(0.5)
@@ -444,7 +498,7 @@ try:
 except KeyboardInterrupt:
     stop()
     #m.printMap()
-    #gpio.cleanup()
+    gpio.cleanup()
 
 
 #autonomous()
