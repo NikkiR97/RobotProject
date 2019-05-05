@@ -142,7 +142,8 @@ def comp():
   y = 0
   z = 0
       
-  for i in range(100):
+  for i in range(50):
+      #bus.write_byte_data(Magnetometer_Address, MAG_CNTL1, 0x12)
       x = x+readComp(HXL)
       y = y+readComp(HYL)
       z = z+readComp(HZL)
@@ -209,7 +210,7 @@ def calibrate():
   x=0
   y=0
   z=0
-  for i in range(50):
+  for i in range(25):
     x = x + readComp(HXL)
     y = y + readComp(HYL)
     z = z + readComp(HZL)

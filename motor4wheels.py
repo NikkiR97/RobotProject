@@ -48,8 +48,8 @@ def ultrasonic_init() :
     
    # ECHO values: front=31, left=22, right=36, back=37
     gpio.setup(31, gpio.IN)
-    gpio.setup(22, gpio.IN)
-    gpio.setup(36, gpio.IN)
+    gpio.setup(22, gpio.IN) #using encoder left 
+    gpio.setup(36, gpio.IN) #using encoder right
     gpio.setup(37, gpio.IN)
 
 def forward(tf) :
@@ -472,7 +472,7 @@ def autonomousPath(map, ultrasonicFD, ultrasonicRD, ultrasonicLD,
         spontaneousAutonomous1Ultrasonic(ultrasonicFD, False, False, orientation)
 
 #init()
-#ultrasonic_init()
+ultrasonic_init()
 #gpio.cleanup()
 ir_sensor_init()    
 try:
