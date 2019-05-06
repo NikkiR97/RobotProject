@@ -79,37 +79,3 @@ except RuntimeError:
     print("enc2 count" + str(j) + "\n")
     #pass
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
