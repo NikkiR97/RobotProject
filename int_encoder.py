@@ -47,24 +47,52 @@ def forward(tf) :
     time.sleep(tf)
     #gpio.cleanup()
     
-def adjust_right_wheels(tf):
+def reverse(tf):
     init()
-    motor1PWM.ChangeDutyCycle(100)
-    motor2PWM.ChangeDutyCycle(100)
-    gpio.output(7,  True)
-    gpio.output(11, True)
-    gpio.output(13, True )
-    gpio.output(15, False)
+    motor1PWM.ChangeDutyCycle(80)
+    motor2PWM.ChangeDutyCycle(80)
+    gpio.output(7, True)
+    gpio.output(11, False)
+    gpio.output(13, False)
+    gpio.output(15, True)
     time.sleep(tf)
     
-def adjust_left_wheels(tf):
+def adjust_right_wheels(tf, direction):
     init()
     motor1PWM.ChangeDutyCycle(100)
     motor2PWM.ChangeDutyCycle(100)
-    gpio.output(7,  False)
-    gpio.output(11, True)
-    gpio.output(13, False)
-    gpio.output(15, False)
+    if (direction == "forward"):
+        gpio.output(7,  True)
+        gpio.output(11, True)
+        gpio.output(13, True)
+        gpio.output(15, False)
+    elif (direction == "reverse"):
+        gpio.output(7,  False)
+        gpio.output(11, False)
+        gpio.output(13, False)
+        gpio.output(15, True)
+    else:
+        print("ERROR: unknown direction.")
+        
+    time.sleep(tf)
+    
+def adjust_left_wheels(tf, direction):
+    init()
+    motor1PWM.ChangeDutyCycle(100)
+    motor2PWM.ChangeDutyCycle(100)
+    if (direction == "forward"):
+        gpio.output(7,  False)
+        gpio.output(11, True)
+        gpio.output(13, False)
+        gpio.output(15, False)
+    elif (direction == "reverse"):
+        gpio.output(7,  True)
+        gpio.output(11, False)
+        gpio.output(13, True)
+        gpio.output(15, True)
+    else:
+        print("ERROR: unknown direction.")
+        
     time.sleep(tf)
 
 def stop():
@@ -85,13 +113,13 @@ def R_encoder_callback(channel):
     counter2 = counter2 + 1
     
 # compares each encoder and adjusts the wheels according to the set threshold    
-def callibrate_orientation(threshold):
+def callibrate_orientation(threshold, direction):
     difference = counter1 - counter2
     while (abs(difference) > threshold): # while the encoders are above threshold difference, adjust accordingly
         if (difference > threshold): #left wheels faster than right wheels
-            adjust_right_wheels(.3)
+            adjust_right_wheels(.3, direction)
         elif (difference < -threshold): #right wheels faster than left wheels
-            adjust_left_wheels(.3)
+            adjust_left_wheels(.3, direction)
         difference = counter1 - counter2 
 
 init()
@@ -101,8 +129,9 @@ gpio.add_event_detect(22, gpio.FALLING, callback=L_encoder_callback)
 gpio.add_event_detect(36, gpio.FALLING, callback=R_encoder_callback)
 
 try:
-    forward(2)
-    callibrate_orientation(5) # set the chosen threshold for the encoders   
+    #forward(2)
+    reverse(3)
+    callibrate_orientation(5, "reverse") # set the chosen threshold for the encoders and direction of movement  
             
 
 except KeyboardInterrupt:
