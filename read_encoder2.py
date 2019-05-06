@@ -185,14 +185,16 @@ def test():
     init()
     #forward(0.75)
     #reverse(0.75)
-    #turn_left(2)
+    turn_left(0.5)
     #turn_right(0.5225)
     #pivot_right(1.044)
     #pivot_left(0.455)
     #turn_left_b(0.5)
-    turn_right_b(0.5)
+    turn_left_b(0.5)
     stop()
-
+    
+test()
+"""
 try:
     print("Begin program")
     init()
@@ -228,7 +230,7 @@ try:
 except KeyboardInterrupt:
     stop()
     gpio.cleanup()
-
+"""
 
 
 
