@@ -91,7 +91,7 @@ def turn_left_b(tf):
     motor2PWM.ChangeDutyCycle(80)
     gpio.output(7,  True)
     gpio.output(11, True)
-    gpio.output(13, True)
+    gpio.output(13, False)
     gpio.output(15, True)
     time.sleep(tf)
     #gpio.cleanup()
@@ -101,9 +101,9 @@ def turn_right_b(tf):
     motor1PWM.ChangeDutyCycle(80)
     motor2PWM.ChangeDutyCycle(80)
     gpio.output(7,  True)
-    gpio.output(11, True)
-    gpio.output(13, False)
-    gpio.output(15, False)
+    gpio.output(11, False)
+    gpio.output(13, True)
+    gpio.output(15, True)
     time.sleep(tf)
     #gpio.cleanup()
 
@@ -179,7 +179,19 @@ def tick_count_b(tf, j, i):
         print("enc1 count" + str(i) + "\n")
         print("enc2 count" + str(j) + "\n")
     
-    return i,j 
+    return i,j
+
+def test():
+    init()
+    #forward(0.75)
+    #reverse(0.75)
+    #turn_left(2)
+    #turn_right(0.5225)
+    #pivot_right(1.044)
+    #pivot_left(0.455)
+    #turn_left_b(0.5)
+    turn_right_b(0.5)
+    stop()
 
 try:
     print("Begin program")
