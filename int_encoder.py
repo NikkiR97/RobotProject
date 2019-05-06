@@ -74,33 +74,35 @@ def stop():
     gpio.output(13,False)
     gpio.output(15,False)
 
-def my_callback1(channel):
+def L_encoder_callback(channel):
     #print("edge 1!")
     global counter1
     counter1 = counter1 + 1
    
-def my_callback2(channel):
+def R_encoder_callback(channel):
     #print("edge 2!")
     global counter2
     counter2 = counter2 + 1
+    
+# compares each encoder and adjusts the wheels according to the set threshold    
+def callibrate_orientation(threshold):
+    difference = counter1 - counter2
+    while (abs(difference) > threshold): # while the encoders are above threshold difference, adjust accordingly
+        if (difference > threshold): #left wheels faster than right wheels
+            adjust_right_wheels(.3)
+        elif (difference < -threshold): #right wheels faster than left wheels
+            adjust_left_wheels(.3)
+        difference = counter1 - counter2 
 
 init()
 encoder_init()
 
-gpio.add_event_detect(22, gpio.FALLING, callback=my_callback1)
-gpio.add_event_detect(36, gpio.FALLING, callback=my_callback2)
+gpio.add_event_detect(22, gpio.FALLING, callback=L_encoder_callback)
+gpio.add_event_detect(36, gpio.FALLING, callback=R_encoder_callback)
 
 try:
-    forward(1)
-    difference = counter1 - counter2
-    while (abs(difference) > 10): # while the encoders are above threshold difference, adjust accordingly
-        if (difference > 10): #left wheels faster than right wheels
-            adjust_right_wheels(.3)
-        elif (difference < -10): #right wheels faster than left wheels
-            adjust_left_wheels(.3)
-        else:
-            print ("wheels about the same speed.")
-        difference = counter1 - counter2        
+    forward(2)
+    callibrate_orientation(5) # set the chosen threshold for the encoders   
             
 
 except KeyboardInterrupt:
