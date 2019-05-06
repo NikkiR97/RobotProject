@@ -1,4 +1,4 @@
-#import RPi.GPIO as gpio
+import RPi.GPIO as gpio
 import time
 import threading
 from interruptingcow import timeout
@@ -52,20 +52,32 @@ def stop():
     gpio.output(13,False)
     gpio.output(15,False)
 
+
+
 try:
     init()
     encoder_init()
-    forward(1)
-    with timeout(60, exception=RuntimeError):
+    forward(0.3)
+    i = 0
+    j = 0
+    with timeout(0.3, exception=RuntimeError):
          while True:
-             enc1 = gpio.input(22)
              enc2 = gpio.input(36)
-             print("enc1: " + str(enc1) + "enc2: " + str(enc2))
+             enc1 = gpio.input(22)
+             #enc2 = gpio.input(36)
+             #print("enc1: " + str(enc1) + "enc2: " + str(enc2))
+             if(enc1):
+                 i = i+1
+             if(enc2):
+                 j = j+1
 
-     stop()
+    stop()
 except RuntimeError:
     stop()
-    pass
+    gpio.cleanup()
+    print("enc1 count" + str(i) + "\n")
+    print("enc2 count" + str(j) + "\n")
+    #pass
 
 
 
