@@ -17,6 +17,7 @@ global counter1
 global counter2
 global direction1
 global direction2
+global flag
 
 direction1 = True
 direction2 = True
@@ -146,28 +147,30 @@ def forward(tf) :
     direction2 = True
     counter1 = 0
     counter2 = 0
+    
+    """
+    direction1 = True
+    direction2 = True
+    counter1 = 0
+    counter2 = 0
     while((counter1 != 40) or (counter2!=40)):
         print("count: " + str(counter1) + " " + str(counter2) + "\n")
         if(counter1<40 or counter1>40):
             if (counter1<40):
                 direction1 = True
-                print("left forward")
                 adjust_left_wheels(0.025)
             elif (counter1>40):
                 direction1 = False
-                print("left back")
                 adjust_left_wheels_b(0.025)
         if(counter2<40 or counter2>40):
             if (counter2<40):
                 direction2 = True
-                print("right forward")
                 adjust_right_wheels(0.025)
             elif (counter2>40):
                 direction2 = False
-                print("right back")
                 adjust_right_wheels_b(0.025)
         Stop(0.25)
-        
+    """    
     #gpio.cleanup()
 
 def reverse(tf):
@@ -223,6 +226,12 @@ def pivot_right(tf):
     gpio.output(13, False)
     gpio.output(15, True)
     time.sleep(tf)
+    
+    direction1 = True
+    direction2 = False
+    counter1 = 0
+    counter2 = 0
+    
     """
     direction1 = True
     direction2 = False
@@ -233,20 +242,15 @@ def pivot_right(tf):
         if(counter1<29 or counter1>29):
             if (counter1<29):
                 direction1 = True
-                print("left forward")
                 adjust_left_wheels(0.025)
             elif (counter1>29):
-                direction1 = False
-                print("left back")
                 adjust_left_wheels_b(0.025)
         if(counter2<-31 or counter2>-31):
             if (counter2<-29):
                 direction2 = True
-                print("right forward")
                 adjust_right_wheels(0.025)
             elif (counter2>-29):
                 direction2 = False
-                print("right back")
                 adjust_right_wheels_b(0.025)
         Stop(0.25)"""
     #gpio.cleanup()
@@ -399,14 +403,17 @@ def shiftOrientation(newShift):
             
 
 def spontaneousAutonomous1Ultrasonic(ultrasonic_distance, irL, irR, orientation):
+    global flag
     if ultrasonic_distance < 50 or not irL or not irR:
         #pivot_right(0.875)
+        flag = False;
         pivot_right(0.7)
         shiftOrientation("right")
         #print(sensor1)
         #print(sensor2)
     else:
         #forward(0.5225)
+        flag = True;
         forward(0.55)
         fxy = forwardByOrientation(orientation)
         global positionX
@@ -535,11 +542,11 @@ ultrasonic_init()
 ir_sensor_init()
 encoder_init()
 
-gpio.add_event_detect(22, gpio.FALLING, callback=my_callback1)
-gpio.add_event_detect(36, gpio.FALLING, callback=my_callback2)
-
 try:
     #m = Map()
+    global flag
+    gpio.add_event_detect(22, gpio.FALLING, callback=my_callback1)
+    gpio.add_event_detect(36, gpio.FALLING, callback=my_callback2)
     while 1:
         distanceF= F_ultrasonic_distance()
         #distanceR = R_ultrasonic_distance()
@@ -548,33 +555,7 @@ try:
         gpio.setmode(gpio.BOARD)
         irL = gpio.input(16)
         irR = gpio.input(18)
-        print(distanceF)
-        """
-        direction1 = True
-        direction2 = True
-        counter1 = 0
-        counter2 = 0
-        while((counter1 != 40) or (counter2!=40)):
-            print("count: " + str(counter1) + " " + str(counter2) + "\n")
-            if(counter1<40 or counter1>40):
-                if (counter1<40):
-                    direction1 = True
-                    print("left forward")
-                    adjust_left_wheels(0.025)
-                elif (counter1>40):
-                    direction1 = False
-                    print("left back")
-                    adjust_left_wheels_b(0.025)
-            if(counter2<40 or counter2>40):
-                if (counter2<40):
-                    direction2 = True
-                    print("right forward")
-                    adjust_right_wheels(0.025)
-                elif (counter2>40):
-                    direction2 = False
-                    print("right back")
-                    adjust_right_wheels_b(0.025)
-            Stop(0.25)"""
+        print(distanceF)   
         
         #init()
         #m.generateMapFrom1Point4Block(positionX, positionY, distanceF, distanceR,
@@ -583,6 +564,38 @@ try:
         spontaneousAutonomous1Ultrasonic(distanceF, irL, irR, orientation)
         #autonomousPath(m, distanceF, distanceR, distanceL, distanceB, orientation)
         #gpio.cleanup()
+        if(flag):
+            val1 = 40
+            val2 = 40
+        else:
+            val1 = 29
+            val2 = -29
+        #direction1 = True
+        #direction2 = True
+        #counter1 = 0
+        #counter2 = 0
+        while((counter1 != val1) or (counter2!=val2)):
+            print("count: " + str(counter1) + " " + str(counter2) + "\n")
+            if(counter1<val1 or counter1>val1):
+                if (counter1<val1):
+                    direction1 = True
+                    print("left forward")
+                    adjust_left_wheels(0.025)
+                elif (counter1>val1):
+                    direction1 = False
+                    print("left back")
+                    adjust_left_wheels_b(0.025)
+            if(counter2<val2 or counter2>val2):
+                if (counter2<val2):
+                    direction2 = True
+                    print("right forward")
+                    adjust_right_wheels(0.025)
+                elif (counter2>val2):
+                    direction2 = False
+                    print("right back")
+                    adjust_right_wheels_b(0.025)
+            Stop(0.25)
+        
         Stop(0.5)
         time.sleep(0.5)
 except KeyboardInterrupt:
