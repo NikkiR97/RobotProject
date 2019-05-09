@@ -4,13 +4,14 @@ from Map import Map
 
 global positionX
 global positionY
-positionX = 0
-positionY = 0
+positionX = 50
+positionY = 50
 
 front_o = 1
 right_o = 2
 back_o = 3
 left_o = 4
+global orientation
 orientation = front_o
 
 gpio.setmode(gpio.BOARD)
@@ -339,10 +340,10 @@ def shiftOrientation(newShift):
             
             
 
-def spontaneousAutonomous1Ultrasonic(ultrasonic_distance, irL, irR, orientation):
+def spontaneousAutonomous1Ultrasonic(ultrasonic_distance, irL, irR, orientation, m):
     if ultrasonic_distance < 50 or not irL or not irR:
         #pivot_right(0.875)
-        pivot_right(0.7)
+        pivot_right(0.9)
         shiftOrientation("right")
         #print(sensor1)
         #print(sensor2)
@@ -354,6 +355,7 @@ def spontaneousAutonomous1Ultrasonic(ultrasonic_distance, irL, irR, orientation)
         global positionY
         positionX = positionX + fxy[0]
         positionY = positionY + fxy[1]
+        m.setMapSpotTraveled(positionX, positionY)
         
 def forwardByOrientation(orientation):
     f = (0, 1) #(x, y)
@@ -412,71 +414,79 @@ def testrun():
     time.sleep(0.5)
     f(2)
 
-def autonomousPath(map, ultrasonicFD, ultrasonicRD, ultrasonicLD,
-                          ultrasonicBD, orientation):
+def autonomousPath(map, ultrasonicFD, orientation, ir_sensor1, ir_sensor2, m):
     #generateMapFrom1Point4Block(positionX, positionY, ultrasonicFD,
     #                            ultrasonicRD, ultrasonicLD, ultrasonicBD,
     #                            orientation)
     nextLoc = map.getNextLoc(positionX, positionY)
     nextStep = map.nextStep((positionX, positionY), nextLoc, orientation)
+    print("next location")
+    print(nextLoc)
+    print("next step")
+    print(nextStep)
+    print("prev orientation")
+    print(orientation)
     if nextStep == 1:
-        if ultrasonicFD > 50:
+        if ultrasonicFD > 50 or not ir_sensor1 or not ir_sensor2:
             forward(0.5225)
             fxy = forwardByOrientation(orientation)
             global positionX
             global positionY
             positionX = positionX + fxy[0]
             positionY = positionY + fxy[1]
+            m.setMapSpotTraveled(positionX, positionY)
         else:
-            spontaneousAutonomous1Ultrasonic(ultrasonicFD, False, False, orientation)
+            spontaneousAutonomous1Ultrasonic(ultrasonicFD, ir_sensor1, ir_sensor2, orientation, m)
     elif nextStep == 2:
         pivot_right(0.875)
         shiftOrientation("right")
-        if ultrasonicFD > 50:
+        if ultrasonicFD > 50 or not ir_sensor1 or not ir_sensor2:
             forward(0.5225)
             fxy = forwardByOrientation(orientation)
             global positionX
             global positionY
             positionX = positionX + fxy[0]
             positionY = positionY + fxy[1]
+            m.setMapSpotTraveled(positionX, positionY)
         else:
-            spontaneousAutonomous1Ultrasonic(ultrasonicFD, False, False, orientation)
+            spontaneousAutonomous1Ultrasonic(ultrasonicFD, ir_sensor1, ir_sensor2, orientation, m)
     elif nextStep == 3:
-        pivot_right(0.875)
-        shiftOrientation("right")
-        pivot_right(0.875)
-        shiftOrientation("right")
-        if ultrasonicFD > 50:
-            forward(0.5225)
-            fxy = forwardByOrientation(orientation)
-            #global positionX
-            #global positionY
-            positionX = positionX + fxy[0]
-            positionY = positionY + fxy[1]
-        else:
-            spontaneousAutonomous1Ultrasonic(ultrasonicFD, False, False, orientation)
-    elif nextStep == 4:
         pivot_left(0.875)
         shiftOrientation("left")
-        if ultrasonicFD > 50:
-            forward()
+        pivot_left(0.875)
+        shiftOrientation("left")
+        if ultrasonicFD > 50 or not ir_sensor1 or not ir_sensor2:
             forward(0.5225)
             fxy = forwardByOrientation(orientation)
             global positionX
             global positionY
             positionX = positionX + fxy[0]
             positionY = positionY + fxy[1]
+            m.setMapSpotTraveled(positionX, positionY)
         else:
-            spontaneousAutonomous1Ultrasonic(ultrasonicFD, False, False, orientation)
+            spontaneousAutonomous1Ultrasonic(ultrasonicFD, ir_sensor1, ir_sensor2, orientation, m)
+    elif nextStep == 2:
+        pivot_left(0.875)
+        shiftOrientation("left")
+        if ultrasonicFD > 50 or not ir_sensor1 or not ir_sensor2:
+            forward(0.5225)
+            fxy = forwardByOrientation(orientation)
+            global positionX
+            global positionY
+            positionX = positionX + fxy[0]
+            positionY = positionY + fxy[1]
+            m.setMapSpotTraveled(positionX, positionY)
+        else:
+            spontaneousAutonomous1Ultrasonic(ultrasonicFD, ir_sensor1, ir_sensor2, orientation, m)
     else:
-        spontaneousAutonomous1Ultrasonic(ultrasonicFD, False, False, orientation)
+        spontaneousAutonomous1Ultrasonic(ultrasonicFD, ir_sensor1, ir_sensor2, orientation, m)
 
 #init()
 ultrasonic_init()
 #gpio.cleanup()
 ir_sensor_init()    
 try:
-    #m = Map()
+    m = Map()
     while 1:
         distanceF= F_ultrasonic_distance()
         #distanceR = R_ultrasonic_distance()
@@ -487,17 +497,16 @@ try:
         irR = gpio.input(18)
         print(distanceF)
         #init()
-        #m.generateMapFrom1Point4Block(positionX, positionY, distanceF, distanceR,
-         #                             distanceB, distanceL, orientation)
+        m.generateMapFrom1Point4BlockX(positionX, positionY, distanceF, irL, irR, orientation)
         #autonomous_ultrasonic()
-        spontaneousAutonomous1Ultrasonic(distanceF, irL, irR, orientation)
-        #autonomousPath(m, distanceF, distanceR, distanceL, distanceB, orientation)
+        #spontaneousAutonomous1Ultrasonic(distanceF, irL, irR, orientation, m)
+        autonomousPath(m, distanceF, orientation, irL, irR, m)
         #gpio.cleanup()
         Stop(0.5)
         time.sleep(0.5)
 except KeyboardInterrupt:
     stop()
-    #m.printMap()
+    m.printMap()
     gpio.cleanup()
 
 

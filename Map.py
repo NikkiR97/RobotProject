@@ -133,8 +133,9 @@ class Map:
         for i in range(100):
             for j in range(100):
                 new_distance = self.manhattanDistance(currentX, currentY, i, j)
-                if self.mapList[i][j].getDetected() and not self.mapList[i][j].getTraveled() and \
-                        not self.mapList[i][j].getObstacle() and new_distance < current_distance:
+                #if self.mapList[i][j].getDetected() is True and
+                if self.mapList[i][j].getTraveled() is False and \
+                   self.mapList[i][j].getObstacle() is False and new_distance < current_distance:
                     current_distance = new_distance
                     destination_x = i
                     destination_y = j
@@ -144,40 +145,43 @@ class Map:
         man_dis_to_des = 1000
         direction = 1
         #front
-        if self.mapList[currentLoc[0]][currentLoc[1]+1].getDetected() and \
-                not self.mapList[currentLoc[0]][currentLoc[1]+1].getObstacle():
+        #if self.mapList[currentLoc[0]][currentLoc[1]+1].getDetected() is True and \
+        if self.mapList[currentLoc[0]][currentLoc[1]+1].getObstacle() is False:
             temp_distance = self.manhattanDistance(currentLoc[0], currentLoc[1]+1, destination[0], destination[1])
             if temp_distance < man_dis_to_des:
                 man_dis_to_des = temp_distance
                 direction = 1
         #right
-        if self.mapList[currentLoc[0]+1][currentLoc[1]].getDetected() and \
-                not self.mapList[currentLoc[0]+1][currentLoc[1]].getObstacle():
+        #if self.mapList[currentLoc[0]+1][currentLoc[1]].getDetected() is True and \
+        if self.mapList[currentLoc[0]+1][currentLoc[1]].getObstacle():
             temp_distance = self.manhattanDistance(currentLoc[0]+1, currentLoc[1], destination[0], destination[1])
             if temp_distance < man_dis_to_des:
                 man_dis_to_des = temp_distance
                 direction = 2
         #back
-        if self.mapList[currentLoc[0]][currentLoc[1]-1].getDetected() and \
-                not self.mapList[currentLoc[0]][currentLoc[1]-1].getObstacle():
+        #if self.mapList[currentLoc[0]][currentLoc[1]-1].getDetected() is True and \
+        if self.mapList[currentLoc[0]][currentLoc[1]-1].getObstacle() is False:
             temp_distance = self.manhattanDistance(currentLoc[0], currentLoc[1]-1, destination[0], destination[1])
             if temp_distance < man_dis_to_des:
                 man_dis_to_des = temp_distance
                 direction = 3
         #left
-        if self.mapList[currentLoc[0]-1][currentLoc[1]].getDetected() and \
-                not self.mapList[currentLoc[0]-1][currentLoc[1]].getObstacle():
+        #if self.mapList[currentLoc[0]-1][currentLoc[1]].getDetected() is True and \
+        if self.mapList[currentLoc[0]-1][currentLoc[1]].getObstacle() is False:          
             temp_distance = self.manhattanDistance(currentLoc[0]-1, currentLoc[1], destination[0], destination[1])
             if temp_distance < man_dis_to_des:
                 man_dis_to_des = temp_distance
                 direction = 4
-
-        direction = (direction + orientation - 1) % 4
-        if direction <= 5:
-            direction = direction - 1
+        
+        direction = (direction + orientation - 1)
+        if direction < 5:
+            direction = direction 
         else:
-            direction = (direction - 1) % 4
+            direction = direction - 4
         return direction
+    
+    def setMapSpotTraveled(self, x, y):
+        self.mapList[x][y].setTraveled(True)
                 
                 
         

@@ -129,9 +129,9 @@ gpio.add_event_detect(22, gpio.FALLING, callback=L_encoder_callback)
 gpio.add_event_detect(36, gpio.FALLING, callback=R_encoder_callback)
 
 try:
-    #forward(2)
-    reverse(3)
-    callibrate_orientation(5, "reverse") # set the chosen threshold for the encoders and direction of movement  
+    forward(1)
+    #reverse(3)
+    callibrate_orientation(5, "forward") # set the chosen threshold for the encoders and direction of movement  
             
 
 except KeyboardInterrupt:
