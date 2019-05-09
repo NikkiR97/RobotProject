@@ -29,6 +29,6 @@ There are no added installations needed. Clone the repository and run the motor4
 
 ## Acknowledgments
 
-* Preetpal Kang - Advisor and counselor
+* Preetpal Kang - Advisor and Counselor
 * Wencen Wu - Computer Engineering Professor
 * David Taylor - Computer Science Professor
