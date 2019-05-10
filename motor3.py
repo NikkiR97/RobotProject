@@ -1,5 +1,6 @@
 import RPi.GPIO as GPIO
-from time import sleep
+#from time import sleep
+import time
 
 # Pins for Motor Driver Inputs 
 Motor1A = 24
@@ -50,7 +51,7 @@ def forward(tf) :
     GPIO.output(Motor4A, True)
     GPIO.output(Motor4B, False)
     
-    sleep(tf)
+    time.sleep(tf)
     GPIO.cleanup()
 
 def reverse(tf):
@@ -187,3 +188,4 @@ try:
 except KeyboardInterrupt:
     stop()
     pass
+
