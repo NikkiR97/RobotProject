@@ -343,7 +343,7 @@ def shiftOrientation(newShift):
 def spontaneousAutonomous1Ultrasonic(ultrasonic_distance, irL, irR, orientation, m):
     if ultrasonic_distance < 50 or not irL or not irR:
         #pivot_right(0.875)
-        pivot_right(0.9)
+        pivot_right(0.85)
         shiftOrientation("right")
         #print(sensor1)
         #print(sensor2)
@@ -428,7 +428,7 @@ def autonomousPath(map, ultrasonicFD, orientation, ir_sensor1, ir_sensor2, m):
     print(orientation)
     if nextStep == 1:
         if ultrasonicFD > 50 or not ir_sensor1 or not ir_sensor2:
-            forward(0.5225)
+            forward(0.55)
             fxy = forwardByOrientation(orientation)
             global positionX
             global positionY
@@ -438,10 +438,10 @@ def autonomousPath(map, ultrasonicFD, orientation, ir_sensor1, ir_sensor2, m):
         else:
             spontaneousAutonomous1Ultrasonic(ultrasonicFD, ir_sensor1, ir_sensor2, orientation, m)
     elif nextStep == 2:
-        pivot_right(0.875)
+        pivot_right(0.85)
         shiftOrientation("right")
         if ultrasonicFD > 50 or not ir_sensor1 or not ir_sensor2:
-            forward(0.5225)
+            forward(0.55)
             fxy = forwardByOrientation(orientation)
             global positionX
             global positionY
@@ -451,12 +451,12 @@ def autonomousPath(map, ultrasonicFD, orientation, ir_sensor1, ir_sensor2, m):
         else:
             spontaneousAutonomous1Ultrasonic(ultrasonicFD, ir_sensor1, ir_sensor2, orientation, m)
     elif nextStep == 3:
-        pivot_left(0.875)
+        pivot_left(0.85)
         shiftOrientation("left")
-        pivot_left(0.875)
+        pivot_left(0.85)
         shiftOrientation("left")
         if ultrasonicFD > 50 or not ir_sensor1 or not ir_sensor2:
-            forward(0.5225)
+            forward(0.55)
             fxy = forwardByOrientation(orientation)
             global positionX
             global positionY
@@ -466,10 +466,10 @@ def autonomousPath(map, ultrasonicFD, orientation, ir_sensor1, ir_sensor2, m):
         else:
             spontaneousAutonomous1Ultrasonic(ultrasonicFD, ir_sensor1, ir_sensor2, orientation, m)
     elif nextStep == 2:
-        pivot_left(0.875)
+        pivot_left(0.85)
         shiftOrientation("left")
         if ultrasonicFD > 50 or not ir_sensor1 or not ir_sensor2:
-            forward(0.5225)
+            forward(0.55)
             fxy = forwardByOrientation(orientation)
             global positionX
             global positionY
@@ -484,7 +484,9 @@ def autonomousPath(map, ultrasonicFD, orientation, ir_sensor1, ir_sensor2, m):
 #init()
 ultrasonic_init()
 #gpio.cleanup()
-ir_sensor_init()    
+ir_sensor_init()
+
+
 try:
     m = Map()
     while 1:

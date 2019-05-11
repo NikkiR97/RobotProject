@@ -402,12 +402,12 @@ def shiftOrientation(newShift):
             
             
 
-def spontaneousAutonomous1Ultrasonic(ultrasonic_distance, irL, irR, orientation):
+def spontaneousAutonomous1Ultrasonic(ultrasonic_distance, irL, irR, orientation, m):
     global flag
     if ultrasonic_distance < 50 or not irL or not irR:
         #pivot_right(0.875)
         flag = False;
-        pivot_right(0.7)
+        pivot_right(0.85)
         shiftOrientation("right")
         #print(sensor1)
         #print(sensor2)
@@ -420,6 +420,7 @@ def spontaneousAutonomous1Ultrasonic(ultrasonic_distance, irL, irR, orientation)
         global positionY
         positionX = positionX + fxy[0]
         positionY = positionY + fxy[1]
+        m.setMapSpotTraveled(positionX, positionY)
         
 def forwardByOrientation(orientation):
     f = (0, 1) #(x, y)
@@ -477,64 +478,74 @@ def testrun():
     Stop(0.5)
     time.sleep(0.5)
     f(2)
-
-def autonomousPath(map, ultrasonicFD, orientation):
+    
+    
+def autonomousPath(map, ultrasonicFD, orientation, ir_sensor1, ir_sensor2, m):
     #generateMapFrom1Point4Block(positionX, positionY, ultrasonicFD,
     #                            ultrasonicRD, ultrasonicLD, ultrasonicBD,
     #                            orientation)
     nextLoc = map.getNextLoc(positionX, positionY)
     nextStep = map.nextStep((positionX, positionY), nextLoc, orientation)
+    print("next location")
+    print(nextLoc)
+    print("next step")
+    print(nextStep)
+    print("prev orientation")
+    print(orientation)
     if nextStep == 1:
-        if ultrasonicFD > 50:
-            forward(0.5225)
+        if ultrasonicFD > 50 or not ir_sensor1 or not ir_sensor2:
+            forward(0.55)
             fxy = forwardByOrientation(orientation)
             global positionX
             global positionY
             positionX = positionX + fxy[0]
             positionY = positionY + fxy[1]
+            m.setMapSpotTraveled(positionX, positionY)
         else:
-            spontaneousAutonomous1Ultrasonic(ultrasonicFD, False, False, orientation)
+            spontaneousAutonomous1Ultrasonic(ultrasonicFD, ir_sensor1, ir_sensor2, orientation, m)
     elif nextStep == 2:
-        pivot_right(0.875)
+        pivot_right(0.85)
         shiftOrientation("right")
-        if ultrasonicFD > 50:
-            forward(0.5225)
+        if ultrasonicFD > 50 or not ir_sensor1 or not ir_sensor2:
+            forward(0.55)
             fxy = forwardByOrientation(orientation)
             global positionX
             global positionY
             positionX = positionX + fxy[0]
             positionY = positionY + fxy[1]
+            m.setMapSpotTraveled(positionX, positionY)
         else:
-            spontaneousAutonomous1Ultrasonic(ultrasonicFD, False, False, orientation)
+            spontaneousAutonomous1Ultrasonic(ultrasonicFD, ir_sensor1, ir_sensor2, orientation, m)
     elif nextStep == 3:
-        pivot_left(0.875)
+        pivot_left(0.85)
         shiftOrientation("left")
-        pivot_left(0.875)
+        pivot_left(0.85)
         shiftOrientation("left")
-        if ultrasonicFD > 50:
-            forward(0.5225)
-            fxy = forwardByOrientation(orientation)
-            #global positionX
-            #global positionY
-            positionX = positionX + fxy[0]
-            positionY = positionY + fxy[1]
-        else:
-            spontaneousAutonomous1Ultrasonic(ultrasonicFD, False, False, orientation)
-    elif nextStep == 4:
-        pivot_left(0.875)
-        shiftOrientation("left")
-        if ultrasonicFD > 50:
-            forward()
-            forward(0.5225)
+        if ultrasonicFD > 50 or not ir_sensor1 or not ir_sensor2:
+            forward(0.55)
             fxy = forwardByOrientation(orientation)
             global positionX
             global positionY
             positionX = positionX + fxy[0]
             positionY = positionY + fxy[1]
+            m.setMapSpotTraveled(positionX, positionY)
         else:
-            spontaneousAutonomous1Ultrasonic(ultrasonicFD, False, False, orientation)
+            spontaneousAutonomous1Ultrasonic(ultrasonicFD, ir_sensor1, ir_sensor2, orientation, m)
+    elif nextStep == 2:
+        pivot_left(0.85)
+        shiftOrientation("left")
+        if ultrasonicFD > 50 or not ir_sensor1 or not ir_sensor2:
+            forward(0.55)
+            fxy = forwardByOrientation(orientation)
+            global positionX
+            global positionY
+            positionX = positionX + fxy[0]
+            positionY = positionY + fxy[1]
+            m.setMapSpotTraveled(positionX, positionY)
+        else:
+            spontaneousAutonomous1Ultrasonic(ultrasonicFD, ir_sensor1, ir_sensor2, orientation, m)
     else:
-        spontaneousAutonomous1Ultrasonic(ultrasonicFD, False, False, orientation)
+        spontaneousAutonomous1Ultrasonic(ultrasonicFD, ir_sensor1, ir_sensor2, orientation, m)
 
 init()
 ultrasonic_init()
@@ -558,10 +569,10 @@ try:
         print(distanceF)   
         
         #init()
-        m.generateMapFrom1Point4BlockX(positionX, positionY, distanceF, True, True, orientation)
+        m.generateMapFrom1Point4BlockX(positionX, positionY, distanceF, irL, irR, orientation)
         #autonomous_ultrasonic()
         #spontaneousAutonomous1Ultrasonic(distanceF, irL, irR, orientation)
-        autonomousPath(m, distanceF, orientation)
+        autonomousPath(m, distanceF, orientation, irL, irR, m)
         #gpio.cleanup()
         if(flag):
             val1 = 40
@@ -579,27 +590,27 @@ try:
                 if (counter1<val1):
                     direction1 = True
                     print("left forward")
-                    adjust_left_wheels(0.025)
+                    adjust_left_wheels(0.05)
                 elif (counter1>val1):
                     direction1 = False
                     print("left back")
-                    adjust_left_wheels_b(0.025)
+                    adjust_left_wheels_b(0.05)
             if(counter2<val2 or counter2>val2):
                 if (counter2<val2):
                     direction2 = True
                     print("right forward")
-                    adjust_right_wheels(0.025)
+                    adjust_right_wheels(0.05)
                 elif (counter2>val2):
                     direction2 = False
                     print("right back")
-                    adjust_right_wheels_b(0.025)
+                    adjust_right_wheels_b(0.05)
             Stop(0.25)
         
         Stop(0.5)
         time.sleep(0.5)
 except KeyboardInterrupt:
     stop()
-    m.printMap()
+    #m.printMap()
     gpio.cleanup()
 
 
