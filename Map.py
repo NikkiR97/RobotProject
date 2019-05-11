@@ -13,7 +13,7 @@ class Map:
     def printMap(self):
         for m in self.mapList:
             for s in m:
-                print(str(s.detected), end=" ")
+                print("Traveled: "+str(s.traveled)+", Detected: "+str(s.detected)+", Obstacle: "+str(s.obstacle), end=" ")
             print(" ")
 
     def generateMapFrom1Point4BlockStatic(self, positionX, positionY, ultrasonicFD,

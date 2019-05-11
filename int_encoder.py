@@ -57,6 +57,16 @@ def reverse(tf):
     gpio.output(15, True)
     time.sleep(tf)
     
+def pivot_right(tf):
+    init()
+    motor1PWM.ChangeDutyCycle(80)
+    motor2PWM.ChangeDutyCycle(80)
+    gpio.output(7,  False)
+    gpio.output(11, True)
+    gpio.output(13, False)
+    gpio.output(15, True)
+    time.sleep(tf)
+    
 def adjust_right_wheels(tf, direction):
     init()
     motor1PWM.ChangeDutyCycle(100)
@@ -117,9 +127,9 @@ def callibrate_orientation(threshold, direction):
     difference = counter1 - counter2
     while (abs(difference) > threshold): # while the encoders are above threshold difference, adjust accordingly
         if (difference > threshold): #left wheels faster than right wheels
-            adjust_right_wheels(.3, direction)
+            adjust_right_wheels(.025, direction)
         elif (difference < -threshold): #right wheels faster than left wheels
-            adjust_left_wheels(.3, direction)
+            adjust_left_wheels(.025, direction)
         difference = counter1 - counter2 
 
 init()
@@ -129,9 +139,12 @@ gpio.add_event_detect(22, gpio.FALLING, callback=L_encoder_callback)
 gpio.add_event_detect(36, gpio.FALLING, callback=R_encoder_callback)
 
 try:
-    forward(1)
-    #reverse(3)
-    callibrate_orientation(5, "forward") # set the chosen threshold for the encoders and direction of movement  
+    #forward(0.55)
+    #reverse(1.5)
+    pivot_right(0.774)
+    forward(0.55)
+    callibrate_orientation(0, "forward") # set the chosen threshold for the encoders and direction of movement
+    
             
 
 except KeyboardInterrupt:

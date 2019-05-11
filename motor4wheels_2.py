@@ -544,6 +544,7 @@ encoder_init()
 try:
     m = Map()
     global flag
+    flag = True
     gpio.add_event_detect(22, gpio.FALLING, callback=my_callback1)
     gpio.add_event_detect(36, gpio.FALLING, callback=my_callback2)
     while 1:

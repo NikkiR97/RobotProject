@@ -119,7 +119,7 @@ def Stop(tf):
 def my_callback1(channel):
     #print("edge 1!")
     global counter1
-    global direction
+    global direction1
     
     if(direction1 == True):
         counter1 = counter1 + 1
@@ -129,16 +129,25 @@ def my_callback1(channel):
 def my_callback2(channel):
     #print("edge 2!")
     global counter2
-    global direction
+    global direction2
     if(direction2 == True):
         counter2 = counter2 + 1
     else:
         counter2 = counter2 - 1
     
 def test():
+    global counter1;
+    global counter2;
+    global direction1;
+    global direction2;
+    counter1 = 0;
+    counter2 = 0;
+    direction1 = True;
+    direction2 = False;
+    
     #adjust_right_wheels(1)
     #adjust_right_wheels_b(1)
-    pivot_right(0.62)
+    pivot_right(0.83)
     stop()
     print("count: " + str(counter1) + " " + str(counter2) + "\n")
 
@@ -163,28 +172,27 @@ try:
             if (counter1<29):
                 direction1 = True
                 print("left forward")
-                adjust_left_wheels(0.025)
+                adjust_left_wheels(0.05)
             elif (counter1>29):
                 direction1 = False
                 print("left back")
-                adjust_left_wheels_b(0.025)
+                adjust_left_wheels_b(0.05)
         if(counter2<-31 or counter2>-31):
             if (counter2<-29):
                 direction2 = True
                 print("right forward")
-                adjust_right_wheels(0.025)
+                adjust_right_wheels(0.05)
             elif (counter2>-29):
                 direction2 = False
                 print("right back")
-                adjust_right_wheels_b(0.025)
+                adjust_right_wheels_b(0.05)
         Stop(0.25)
 
     #adjust_right_wheels_b(0.02)
 
 except KeyboardInterrupt:
     stop()
-    gpio.cleanup()
-    
+    gpio.cleanup() 
 stop()
 print("enc1: " + str(counter1) + " enc2: " + str(counter2))
 gpio.cleanup()

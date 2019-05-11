@@ -1,0 +1,600 @@
+Starting Measurement from FRONT ultrasonic...
+78.46832275390625
+next location
+(50, 50)
+next step
+1
+prev orientation
+1
+Starting Measurement from FRONT ultrasonic...
+57.473182678222656
+next location
+(49, 51)
+next step
+4
+prev orientation
+1
+Starting Measurement from FRONT ultrasonic...
+34.17181968688965
+next location
+(49, 52)
+next step
+4
+prev orientation
+1
+Starting Measurement from FRONT ultrasonic...
+203.11784744262695
+next location
+(49, 52)
+next step
+1
+prev orientation
+2
+Starting Measurement from FRONT ultrasonic...
+182.7549934387207
+next location
+(51, 51)
+next step
+4
+prev orientation
+2
+Starting Measurement from FRONT ultrasonic...
+160.7222557067871
+next location
+(52, 51)
+next step
+4
+prev orientation
+2
+Starting Measurement from FRONT ultrasonic...
+139.85276222229004
+next location
+(53, 51)
+next step
+4
+prev orientation
+2
+Starting Measurement from FRONT ultrasonic...
+120.78690528869629
+next location
+(54, 51)
+next step
+4
+prev orientation
+2
+Starting Measurement from FRONT ultrasonic...
+100.23355484008789
+next location
+(55, 51)
+next step
+4
+prev orientation
+2
+Starting Measurement from FRONT ultrasonic...
+94.07687187194824
+next location
+(56, 51)
+next step
+4
+prev orientation
+2
+Starting Measurement from FRONT ultrasonic...
+123.0931282043457
+next location
+(57, 51)
+next step
+4
+prev orientation
+2
+Starting Measurement from FRONT ultrasonic...
+99.30539131164551
+next location
+(58, 51)
+next step
+4
+prev orientation
+2
+Starting Measurement from FRONT ultrasonic...
+76.15804672241211
+next location
+(59, 51)
+next step
+4
+prev orientation
+2
+Starting Measurement from FRONT ultrasonic...
+53.29442024230957
+next location
+(60, 51)
+next step
+4
+prev orientation
+2
+Starting Measurement from FRONT ultrasonic...
+29.46615219116211
+next location
+(61, 51)
+next step
+4
+prev orientation
+2
+Starting Measurement from FRONT ultrasonic...
+114.84098434448242
+next location
+(61, 51)
+next step
+1
+prev orientation
+3
+Starting Measurement from FRONT ultrasonic...
+50.19378662109375
+next location
+(60, 51)
+next step
+2
+prev orientation
+3
+Starting Measurement from FRONT ultrasonic...
+2425.858736038208
+next location
+(60, 50)
+next step
+3
+prev orientation
+4
+Starting Measurement from FRONT ultrasonic...
+107.11979866027832
+next location
+(59, 50)
+next step
+1
+prev orientation
+2
+Starting Measurement from FRONT ultrasonic...
+23.435115814208984
+next location
+(61, 49)
+next step
+4
+prev orientation
+2
+Starting Measurement from FRONT ultrasonic...
+12.013435363769531
+next location
+(59, 50)
+next step
+2
+prev orientation
+3
+Starting Measurement from FRONT ultrasonic...
+104.43663597106934
+next location
+(60, 49)
+next step
+3
+prev orientation
+4
+Starting Measurement from FRONT ultrasonic...
+13.472557067871094
+next location
+(59, 49)
+next step
+1
+prev orientation
+2
+Starting Measurement from FRONT ultrasonic...
+13.472557067871094
+next location
+(61, 48)
+next step
+4
+prev orientation
+2
+Starting Measurement from FRONT ultrasonic...
+50.42076110839844
+next location
+(61, 48)
+next step
+1
+prev orientation
+3
+Starting Measurement from FRONT ultrasonic...
+30.637502670288086
+next location
+(60, 48)
+next step
+2
+prev orientation
+3
+Starting Measurement from FRONT ultrasonic...
+135.9536647796631
+next location
+(60, 48)
+next step
+4
+prev orientation
+1
+Starting Measurement from FRONT ultrasonic...
+109.80701446533203
+next location
+(59, 49)
+next step
+4
+prev orientation
+1
+Starting Measurement from FRONT ultrasonic...
+2423.8038063049316
+next location
+(59, 49)
+next step
+1
+prev orientation
+2
+Starting Measurement from FRONT ultrasonic...
+2425.0805377960205
+next location
+(62, 48)
+next step
+4
+prev orientation
+2
+Starting Measurement from FRONT ultrasonic...
+134.97686386108398
+next location
+(62, 47)
+next step
+4
+prev orientation
+3
+Starting Measurement from FRONT ultrasonic...
+60.99534034729004
+next location
+(62, 47)
+next step
+1
+prev orientation
+4
+Starting Measurement from FRONT ultrasonic...
+35.00676155090332
+next location
+(59, 49)
+next step
+3
+prev orientation
+4
+Starting Measurement from FRONT ultrasonic...
+2421.0517406463623
+next location
+(59, 49)
+next step
+1
+prev orientation
+2
+Starting Measurement from FRONT ultrasonic...
+2407.8547954559326
+next location
+(59, 49)
+next step
+1
+prev orientation
+2
+Starting Measurement from FRONT ultrasonic...
+2423.7024784088135
+next location
+(62, 47)
+next step
+3
+prev orientation
+2
+Starting Measurement from FRONT ultrasonic...
+145.70951461791992
+next location
+(63, 48)
+next step
+2
+prev orientation
+4
+Starting Measurement from FRONT ultrasonic...
+95.1995849609375
+next location
+(62, 47)
+next step
+2
+prev orientation
+1
+Starting Measurement from FRONT ultrasonic...
+212.53728866577148
+next location
+(62, 51)
+next step
+2
+prev orientation
+2
+Starting Measurement from FRONT ultrasonic...
+147.07541465759277
+next location
+(63, 51)
+next step
+3
+prev orientation
+3
+Starting Measurement from FRONT ultrasonic...
+126.49774551391602
+next location
+(63, 48)
+next step
+3
+prev orientation
+1
+Starting Measurement from FRONT ultrasonic...
+2426.422119140625
+next location
+(63, 51)
+next step
+3
+prev orientation
+3
+Starting Measurement from FRONT ultrasonic...
+78.56559753417969
+next location
+(63, 48)
+next step
+3
+prev orientation
+1
+Starting Measurement from FRONT ultrasonic...
+138.64898681640625
+next location
+(63, 51)
+next step
+3
+prev orientation
+3
+Starting Measurement from FRONT ultrasonic...
+75.01101493835449
+next location
+(63, 48)
+next step
+3
+prev orientation
+1
+Starting Measurement from FRONT ultrasonic...
+178.6046028137207
+next location
+(63, 51)
+next step
+3
+prev orientation
+3
+Starting Measurement from FRONT ultrasonic...
+158.2660675048828
+next location
+(63, 48)
+next step
+3
+prev orientation
+1
+Starting Measurement from FRONT ultrasonic...
+2423.1350421905518
+next location
+(63, 51)
+next step
+3
+prev orientation
+3
+Starting Measurement from FRONT ultrasonic...
+159.85488891601562
+next location
+(63, 48)
+next step
+3
+prev orientation
+1
+Starting Measurement from FRONT ultrasonic...
+173.68006706237793
+next location
+(63, 51)
+next step
+3
+prev orientation
+3
+Starting Measurement from FRONT ultrasonic...
+133.03136825561523
+next location
+(63, 48)
+next step
+3
+prev orientation
+1
+Starting Measurement from FRONT ultrasonic...
+83.83870124816895
+next location
+(63, 51)
+next step
+3
+prev orientation
+3
+Starting Measurement from FRONT ultrasonic...
+396.8162536621094
+next location
+(63, 48)
+next step
+3
+prev orientation
+1
+Starting Measurement from FRONT ultrasonic...
+171.19956016540527
+next location
+(63, 51)
+next step
+3
+prev orientation
+3
+Starting Measurement from FRONT ultrasonic...
+171.96154594421387
+next location
+(63, 48)
+next step
+3
+prev orientation
+1
+Starting Measurement from FRONT ultrasonic...
+2420.387029647827
+next location
+(63, 51)
+next step
+3
+prev orientation
+3
+Starting Measurement from FRONT ultrasonic...
+88.43088150024414
+next location
+(63, 48)
+next step
+3
+prev orientation
+1
+Starting Measurement from FRONT ultrasonic...
+136.50083541870117
+next location
+(63, 51)
+next step
+3
+prev orientation
+3
+Starting Measurement from FRONT ultrasonic...
+98.31643104553223
+next location
+(63, 48)
+next step
+3
+prev orientation
+1
+Starting Measurement from FRONT ultrasonic...
+102.94914245605469
+next location
+(63, 51)
+next step
+3
+prev orientation
+3
+Starting Measurement from FRONT ultrasonic...
+212.0954990386963
+next location
+(63, 48)
+next step
+3
+prev orientation
+1
+Starting Measurement from FRONT ultrasonic...
+111.03105545043945
+next location
+(63, 51)
+next step
+3
+prev orientation
+3
+Starting Measurement from FRONT ultrasonic...
+143.08714866638184
+next location
+(63, 48)
+next step
+3
+prev orientation
+1
+Starting Measurement from FRONT ultrasonic...
+79.36811447143555
+next location
+(63, 51)
+next step
+3
+prev orientation
+3
+Starting Measurement from FRONT ultrasonic...
+2396.8586921691895
+next location
+(63, 48)
+next step
+3
+prev orientation
+1
+Starting Measurement from FRONT ultrasonic...
+148.29540252685547
+next location
+(63, 51)
+next step
+3
+prev orientation
+3
+Starting Measurement from FRONT ultrasonic...
+141.8752670288086
+next location
+(63, 48)
+next step
+3
+prev orientation
+1
+Starting Measurement from FRONT ultrasonic...
+2395.4198360443115
+next location
+(63, 51)
+next step
+3
+prev orientation
+3
+Starting Measurement from FRONT ultrasonic...
+81.18796348571777
+next location
+(63, 48)
+next step
+3
+prev orientation
+1
+Starting Measurement from FRONT ultrasonic...
+166.88299179077148
+next location
+(63, 51)
+next step
+3
+prev orientation
+3
+Starting Measurement from FRONT ultrasonic...
+130.9683322906494
+next location
+(63, 48)
+next step
+3
+prev orientation
+1
+Starting Measurement from FRONT ultrasonic...
+2399.724245071411
+next location
+(63, 51)
+next step
+3
+prev orientation
+3
+Starting Measurement from FRONT ultrasonic...
+233.77561569213867
+next location
+(63, 48)
+next step
+3
+prev orientation
+1
+Starting Measurement from FRONT ultrasonic...
+88.8969898223877
+next location
+(63, 51)
+next step
+3
+prev orientation
+3
+Starting Measurement from FRONT ultrasonic...
+173.27880859375
+next location
+(63, 48)
+next step
+3
+prev orientation
+1
