@@ -3,7 +3,7 @@
 This is the repository for the team's senior project (CMPE 195). The members include Gabriel Baki, Kimberly Flores, John Milam, and Nikkitha Ravi.
 
 ## Presentation
-Homebrew Robotics Club Hosted at Google HQ (3:55-11:00): https://www.youtube.com/watch?v=Yqy02Hk2HmY&t=461s
+Homebrew Robotics Hosted at Google Headquarter (3:55-11:00): https://www.youtube.com/watch?v=Yqy02Hk2HmY&t=461s
 
 ## Getting Started
 
