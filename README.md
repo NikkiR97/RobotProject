@@ -1,6 +1,6 @@
 # Autonomous Multi-Agent Cleaner Robots Project
 
-This is the repository for the team's senior project (CMPE 195). The members include Gabriel Baki, Kimberly Flores, John Milam, and Nikkitha Ravi.
+This is the repository for the team's senior project (CMPE 195). The members include Gabriel Baki, Kimberly Flores and Nikkitha Ravi.
 
 ## Presentation
 Homebrew Robotics Hosted at Google Headquarter (3:55-11:00): https://www.youtube.com/watch?v=Yqy02Hk2HmY&t=461s
